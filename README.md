@@ -35,5 +35,25 @@ This repository packages a logistic regression model (stored in `logreg_rrf_sava
 
 ## Development notes
 
+- The service validates that the incoming feature vector has the dimension specified in `config.json` (defaults to 15) so the
+  model receives the correct shape.
+- Model loading happens at startup, and requests will return an error if the model artifact is missing or cannot be loaded.
+
+## Deploy as an API service
+
+You can containerize the FastAPI service for deployment with Docker:
+
+```bash
+docker build -t rrf-savant-api .
+docker run --rm -p 8000:8000 \
+  -e MODEL_PATH=/app/logreg_rrf_savant.joblib \
+  -e MODEL_CONFIG_PATH=/app/config.json \
+  rrf-savant-api
+```
+
+- Override `PORT` at runtime (`-e PORT=8080`) to change the exposed port.
+- Mount or replace `logreg_rrf_savant.joblib` if you want to serve a different model (update `MODEL_PATH` accordingly).
+- Point `MODEL_CONFIG_PATH` at the matching configuration when swapping models so feature validation aligns with the
+  new artifact.
 - The service validates that the incoming feature vector has exactly 15 elements to match the model's expected input dimension from `config.json`.
 - Model loading happens at startup, and requests will return an error if the model artifact is missing or cannot be loaded.
