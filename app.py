@@ -1,6 +1,8 @@
 import json
 import os
 from typing import Dict, List
+import os
+from typing import List
 
 import joblib
 import numpy as np
@@ -38,6 +40,7 @@ class Features(BaseModel):
     @classmethod
     def validate_length(cls, value: List[float]) -> List[float]:
         expected_dim = EXPECTED_DIM
+        expected_dim = 15
         if len(value) != expected_dim:
             raise ValueError(f"Expected {expected_dim} features, received {len(value)}")
         return value
@@ -46,6 +49,7 @@ class Features(BaseModel):
 class Prediction(BaseModel):
     label: str
     probabilities: Dict[str, float]
+    probabilities: dict
 
 
 @app.on_event("startup")

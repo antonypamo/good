@@ -35,6 +35,5 @@ This repository packages a logistic regression model (stored in `logreg_rrf_sava
 
 ## Development notes
 
-- The service validates that the incoming feature vector has the dimension specified in `config.json` (defaults to 15) so the
-  model receives the correct shape.
+- The service validates that the incoming feature vector has exactly 15 elements to match the model's expected input dimension from `config.json`.
 - Model loading happens at startup, and requests will return an error if the model artifact is missing or cannot be loaded.
