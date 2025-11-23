@@ -15,6 +15,8 @@ This repository packages a logistic regression model (stored in `logreg_rrf_sava
    ```
 
    Set `MODEL_PATH` to override the default `logreg_rrf_savant.joblib` location if you store the model elsewhere.
+   Use `MODEL_CONFIG_PATH` to point at a custom config file when the expected feature dimension differs from the bundled
+   `config.json`.
 
 3. **Send a prediction request**
    ```bash

@@ -1,3 +1,6 @@
+import json
+import os
+from typing import Dict, List
 import os
 from typing import List
 
@@ -7,6 +10,23 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
 MODEL_PATH = os.getenv("MODEL_PATH", "logreg_rrf_savant.joblib")
+MODEL_CONFIG_PATH = os.getenv("MODEL_CONFIG_PATH", "config.json")
+
+
+def _load_expected_dim(config_path: str = MODEL_CONFIG_PATH, default_dim: int = 15) -> int:
+    """Return the expected feature dimension from the model config if available."""
+
+    try:
+        with open(config_path, "r", encoding="utf-8") as config_file:
+            config = json.load(config_file)
+        return int(config.get("input_features", {}).get("dimension", default_dim))
+    except FileNotFoundError:
+        return default_dim
+    except (json.JSONDecodeError, TypeError, ValueError):
+        return default_dim
+
+
+EXPECTED_DIM = _load_expected_dim()
 
 app = FastAPI(title="RRF Savant Model API", version="1.0.0")
 
@@ -19,6 +39,7 @@ class Features(BaseModel):
     @field_validator("features")
     @classmethod
     def validate_length(cls, value: List[float]) -> List[float]:
+        expected_dim = EXPECTED_DIM
         expected_dim = 15
         if len(value) != expected_dim:
             raise ValueError(f"Expected {expected_dim} features, received {len(value)}")
@@ -27,6 +48,7 @@ class Features(BaseModel):
 
 class Prediction(BaseModel):
     label: str
+    probabilities: Dict[str, float]
     probabilities: dict
 
 
