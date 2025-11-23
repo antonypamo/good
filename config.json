@@ -1,0 +1,14 @@
+{
+  "model_type": "logistic_regression",
+  "framework": "scikit-learn",
+  "input_features": {
+    "description": "RRF-Savant meta-state features (phi, omega, coherence, S_RRF, C_RRF, E_H, dominant_frequency, one-hot Phi nodes)",
+    "dimension": 15
+  },
+  "created_from": "RRFSavant_AGI_Core_Colab.ipynb",
+  "dependencies": [
+    "scikit-learn",
+    "numpy",
+    "joblib"
+  ]
+}
